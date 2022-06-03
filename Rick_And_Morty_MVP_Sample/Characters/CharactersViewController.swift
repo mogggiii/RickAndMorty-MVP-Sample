@@ -27,7 +27,7 @@ class CharactersViewController: UITableViewController {
 	}
 	
 	fileprivate func presenterConfigure() {
-		let networManager = NetworkManager()
+		let networManager = Service()
 		presenter = CharactersViewPresenter(view: self, networkManager: networManager)
 		presenter?.fetchCharactersWithUrl(url)
 	}
@@ -53,6 +53,13 @@ class CharactersViewController: UITableViewController {
 	override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
 		return 75
 	}
+	
+	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		guard let character = presenter?.rickAndMorty?.results[indexPath.row] else { return }
+		let detailViewController = self.generateDetailViewController(with: character)
+		detailViewController.modalPresentationStyle = .fullScreen
+		present(detailViewController, animated: true)
+	}
 }
 
 extension CharactersViewController: CharactersViewProtocol {
@@ -60,5 +67,18 @@ extension CharactersViewController: CharactersViewProtocol {
 		DispatchQueue.main.async {
 			self.tableView.reloadData()
 		}
+	}
+}
+
+
+extension CharactersViewController {
+	func generateDetailViewController(with charachter: Results) -> UIViewController {
+		let viewController = DetailViewController()
+		let view = viewController.detailView
+		let service = Service()
+		let presenter = DetailViewPresenter(view: view, service: service, character: charachter)
+		view.presenter = presenter
+		
+		return viewController
 	}
 }

@@ -12,7 +12,7 @@ protocol NetworkManagerProtocol: AnyObject {
 	func fetchCharacter(_ url: String, completion: @escaping (Result<Results, Error>) -> ())
 }
 
-class NetworkManager: NetworkManagerProtocol {
+class Service: NetworkManagerProtocol {
 	
 	fileprivate func fetchData<T: Decodable>(_ url: String, completion: @escaping (Result<T, Error>) -> ()) {
 		guard let url = URL(string: url) else { return }
