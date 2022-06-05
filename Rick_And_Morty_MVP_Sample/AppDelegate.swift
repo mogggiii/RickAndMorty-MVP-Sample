@@ -13,7 +13,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-		// Override point for customization after application launch.
+		let appearance = UINavigationBarAppearance()
+		appearance.configureWithOpaqueBackground()
+		appearance.backgroundColor = UIColor(red: 232 / 255, green: 154 / 255, blue: 199 / 255, alpha: 1)
+		appearance.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
+		appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
+		
+		UINavigationBar.appearance().standardAppearance = appearance
+		UINavigationBar.appearance().scrollEdgeAppearance = UINavigationBar.appearance().standardAppearance
+		UINavigationBar.appearance().isTranslucent = false
+		UINavigationBar.appearance().prefersLargeTitles = true
 		return true
 	}
 

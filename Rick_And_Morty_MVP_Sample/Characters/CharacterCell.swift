@@ -15,19 +15,7 @@ class CharacterCell: UITableViewCell {
 			characterName.text = character.name
 			
 			guard let url = URL(string: character.image) else { return }
-			URLSession.shared.dataTask(with: url) { data, _, erro in
-				if let erro = erro {
-					print(erro)
-				}
-				
-				guard let data = data else { return }
-				
-				DispatchQueue.main.async {
-					self.characterImageView.image = UIImage(data: data)
-				}
-				
-				
-			} .resume()
+			characterImageView.af.setImage(withURL: url)
 		}
 	}
 	
@@ -51,6 +39,7 @@ class CharacterCell: UITableViewCell {
 	override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
 		
+		contentView.backgroundColor = UIColor(red: 232 / 255, green: 154 / 255, blue: 199 / 255, alpha: 0.4)
 		configureCell()
 	}
 	

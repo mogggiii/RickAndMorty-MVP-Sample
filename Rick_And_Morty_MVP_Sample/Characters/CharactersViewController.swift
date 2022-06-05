@@ -25,6 +25,7 @@ class CharactersViewController: UITableViewController {
 		super.viewDidLoad()
 		
 		navigationItem.title = "Rick and Morty"
+//		navigationController?.navigationBar.prefersLargeTitles = true
 		
 		configureTableView()
 		presenterConfigure()
@@ -38,6 +39,7 @@ class CharactersViewController: UITableViewController {
 	
 	fileprivate func configureTableView() {
 		tableView.register(CharacterCell.self, forCellReuseIdentifier: reuseId)
+		tableView.backgroundColor = UIColor(red: 232 / 255, green: 154 / 255, blue: 199 / 255, alpha: 0.3)
 	}
 	
 	override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

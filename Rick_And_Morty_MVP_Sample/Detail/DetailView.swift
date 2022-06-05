@@ -44,7 +44,7 @@ class DetailView: UIView, DetailViewProtocol {
 		super.init(frame: frame)
 		
 		setupLayout()
-		backgroundColor = .systemBackground
+		backgroundColor = UIColor(red: 232 / 255, green: 154 / 255, blue: 199 / 255, alpha: 1)
 	}
 	
 	required init?(coder: NSCoder) {
