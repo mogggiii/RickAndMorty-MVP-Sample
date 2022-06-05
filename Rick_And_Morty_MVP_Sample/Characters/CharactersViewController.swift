@@ -11,6 +11,10 @@ protocol CharactersViewProtocol: AnyObject {
 	func reloadData()
 }
 
+protocol DetailViewControllerProtocol: AnyObject {
+	func generateDetailViewController(with charachter: Results) -> UIViewController
+}
+
 class CharactersViewController: UITableViewController {
 	
 	fileprivate var presenter: CharactersViewPresenterProtocol?
@@ -71,14 +75,13 @@ extension CharactersViewController: CharactersViewProtocol {
 }
 
 
-extension CharactersViewController {
+extension CharactersViewController: DetailViewControllerProtocol {
 	func generateDetailViewController(with charachter: Results) -> UIViewController {
 		let viewController = DetailViewController()
 		let view = viewController.detailView
 		let service = Service()
 		let presenter = DetailViewPresenter(view: view, service: service, character: charachter)
 		view.presenter = presenter
-		
 		return viewController
 	}
 }

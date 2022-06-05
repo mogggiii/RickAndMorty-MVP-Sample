@@ -27,7 +27,10 @@ class Service: NetworkManagerProtocol {
 			
 			do {
 				let data = try JSONDecoder().decode(T.self, from: data)
-				completion(.success(data))
+				
+				DispatchQueue.main.async {
+					completion(.success(data))
+				}
 			} catch let error {
 				completion(.failure(error))
 			}

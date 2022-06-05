@@ -5,8 +5,8 @@
 //  Created by mogggiii on 03.06.2022.
 //
 
-import Foundation
 import UIKit
+import AlamofireImage
 
 protocol DetailViewProtocol: AnyObject {
 	func setCharacterImage(_ url: String)
@@ -15,11 +15,19 @@ protocol DetailViewProtocol: AnyObject {
 
 class DetailView: UIView, DetailViewProtocol {
 	
+	private enum Constants: CGFloat {
+		case imageSize = 250
+		case imageTopSpace = 80
+		case labelSpacing = 40
+	}
+	
 	var presenter: DetailViewPresenterProtocol?
 	
 	fileprivate let characterImageView: UIImageView = {
 		let imageView = UIImageView()
 		imageView.translatesAutoresizingMaskIntoConstraints = false
+		imageView.clipsToBounds = true
+		imageView.contentMode = .scaleAspectFill
 		imageView.backgroundColor = .white
 		return imageView
 	}()
@@ -28,7 +36,7 @@ class DetailView: UIView, DetailViewProtocol {
 		let label = UILabel()
 		label.translatesAutoresizingMaskIntoConstraints = false
 		label.numberOfLines = 0
-		label.font = .systemFont(ofSize: 17)
+		label.font = .systemFont(ofSize: 17, weight: .semibold)
 		return label
 	}()
 	
@@ -36,7 +44,7 @@ class DetailView: UIView, DetailViewProtocol {
 		super.init(frame: frame)
 		
 		setupLayout()
-		backgroundColor = .blue
+		backgroundColor = .systemBackground
 	}
 	
 	required init?(coder: NSCoder) {
@@ -47,40 +55,27 @@ class DetailView: UIView, DetailViewProtocol {
 		addSubview(characterImageView)
 		addSubview(descriptionLabel)
 		
+		characterImageView.layer.cornerRadius = 20
+		
 		NSLayoutConstraint.activate([
-			characterImageView.topAnchor.constraint(equalTo: topAnchor, constant: 100),
-			characterImageView.heightAnchor.constraint(equalToConstant: 200),
-			characterImageView.widthAnchor.constraint(equalToConstant: 200),
+			characterImageView.topAnchor.constraint(equalTo: topAnchor, constant: Constants.imageTopSpace.rawValue),
+			characterImageView.heightAnchor.constraint(equalToConstant: Constants.imageSize.rawValue),
+			characterImageView.widthAnchor.constraint(equalToConstant: Constants.imageSize.rawValue),
 			characterImageView.centerXAnchor.constraint(equalTo: centerXAnchor),
 			
-			descriptionLabel.topAnchor.constraint(equalTo: characterImageView.bottomAnchor, constant: 20),
-			descriptionLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20),
-			descriptionLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-			descriptionLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20)
+			descriptionLabel.topAnchor.constraint(equalTo: characterImageView.bottomAnchor, constant: Constants.labelSpacing.rawValue),
+			descriptionLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constants.labelSpacing.rawValue),
+			descriptionLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constants.labelSpacing.rawValue)
 		])
 	}
 	
 	func setCharacterImage(_ url: String) {
 		guard let url = URL(string: url) else { return }
-		URLSession.shared.dataTask(with: url) { data, _, error in
-			if let error = error {
-				print("ZALUPE", error)
-				return
-			}
-			
-			guard let data = data else { return }
-			
-			DispatchQueue.main.async {
-				self.characterImageView.image = UIImage(data: data)
-			}
-		} .resume()
-		
+		characterImageView.af.setImage(withURL: url)
 	}
 	
 	func configureUI(_ character: Results) {
-		DispatchQueue.main.async {
-			self.descriptionLabel.text = character.description
-		}
+		descriptionLabel.text = character.description
 	}
 	
 }

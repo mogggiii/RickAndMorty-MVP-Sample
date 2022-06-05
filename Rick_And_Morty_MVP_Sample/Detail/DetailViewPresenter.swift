@@ -29,7 +29,6 @@ class DetailViewPresenter: DetailViewPresenterProtocol {
 		service?.fetchCharacter(character.url, completion: { [weak self] result in
 			switch result {
 			case .success(let character):
-				print("cff", character.description)
 				self?.character = character
 				self?.view?.setCharacterImage(character.image)
 				self?.view?.configureUI(character)
